@@ -16,6 +16,8 @@
 %% v2.0.1, Mar 31, 2011,合并了Quansheng Guan部分修改,主要包含：草稿引入水印，加入定理环境，完善标题、表格和程序代码等格式
 %% v2.1.0, Jun 20, 2015,启用pdfcover选项，修改代码区显示方式，附录页眉，去除草稿水印，lyx模板
 
+% Compatible with Windows by Tian Xie
+
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
 \ProvidesClass{sufethesis}[2011/03/31 2.0.1 The LaTeX class for the thesis of Shanghai University of Finance and Economics]
 
@@ -65,17 +67,17 @@
 %% 字体设置
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \RequirePackage[BoldFont, SlantFont]{xeCJK} % xeCJK package
-\usepackage{CJKnumb}
+\usepackage{xCJKnumb}
 %\punctstyle{kaiming}
 \setmainfont[Mapping=tex-text]{Times New Roman}%\rmfamily 使用的字体,默认英文和数字的字体。
 \XeTeXlinebreaklocale "zh" %采用中文断行方式
 \XeTeXlinebreakskip = 0pt plus 1pt %字元间可加入0pt~1pt 的弹性间距，这样才能排出左右对齐的段落。
 
-\setCJKmainfont{Songti SC}
-\setCJKfamilyfont{song}{Songti SC}
-\setCJKfamilyfont{hei}{Heiti SC}
-\setCJKfamilyfont{kai}{Kaiti SC}
-\setCJKfamilyfont{fang}{STFangsong}
+\setCJKmainfont{simsun.ttc}
+\setCJKfamilyfont{song}{simsun.ttc}
+\setCJKfamilyfont{hei}{simhei.ttf}
+\setCJKfamilyfont{kai}{simkai.ttf}
+\setCJKfamilyfont{fang}{simfang.ttf}
 
 \newcommand{\songti}{\CJKfamily{song}}
 \newcommand{\heiti}{\CJKfamily{hei}}
@@ -248,7 +250,8 @@
 \setdefaultenum{1)}{a)}{i.}{A.}% 设置列表模式,for \enumerate
 \setdefaultleftmargin{4ex}{}{}{}{}{}%standard \itemize :• – ∗ ·
 
-\RequirePackage[numbers,super,square,sort&compress]{natbib} % 修改引用参考文献格式
+%\RequirePackage[numbers,super,square,sort&compress]{natbib} % 修改引用参考文献格式
+\RequirePackage[authoryear,sort&compress]{natbib} % 修改引用参考文献格式
 % 用natbib代替下面的一些设置
 %\let\originalcite=\cite
 %\renewcommand{\cite}[1]{\textsuperscript{\originalcite{#1}}}
@@ -256,10 +259,13 @@
 
 %% 程序代码格式
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\RequirePackage[ruled,vlined,algochapter]{algorithm2e}
-% algorithm2e 中文标题定制
-\renewcommand{\algorithmcfname}{算法}
-\renewcommand\thealgocf{\csname the\algocf@within\endcsname-\@arabic\c@algocf}%
+\RequirePackage{algorithm}
+\RequirePackage{algorithmicx}
+\RequirePackage{algpseudocode}
+\floatname{algorithm}{算法}
+\renewcommand{\algorithmicrequire}{\textbf{输入：}} \renewcommand{\algorithmicensure}{\textbf{输出：}}
+%\renewcommand{\algorithmcfname}{算法}
+%\renewcommand\thealgocf{\csname the\algocf@within\endcsname-\@arabic\c@algocf}%
 
 \RequirePackage{listings}
 \definecolor{mygray}{RGB}{245,245,245}
@@ -295,7 +301,7 @@
 \RequirePackage{titletoc} 
 \renewcommand\contentsname{\centerline{\toctitlefont{目\quad{}录}}}
 \titlecontents{chapter}[0ex]{\tocchapterfont}{%
-    第\CJKnumber{\thecontentslabel}章\quad{}}{}{%
+    第\xCJKnumber{\thecontentslabel}章\quad{}}{}{%
     \hspace{.5em}\titlerule*[5pt]{$\cdot$}\contentspage}%
 \titlecontents{section}[1em]{\tocsectionfont}{%
     \thecontentslabel\quad{}}{}{%
@@ -314,9 +320,9 @@
 % Text style
 %%%%%%%%%%%%%%%%%%%%%%%%
 \RequirePackage[pagestyles, rm]{titlesec}%调用titlesec涵盖fancyhdr的功能
-\renewcommand{\chaptername}{第\CJKnumber{\thechapter}章}
-\titleformat{\chapter}[hang]{\textchapterfont}{\textbf{第\CJKnumber{\thechapter}章}}{1em}\textbf{{}}
-\titleformat{\section}[hang]{\textsectionfont}{第\CJKnumber{\arabic{section}}节}{1em}{}
+\renewcommand{\chaptername}{第\xCJKnumber{\thechapter}章}
+\titleformat{\chapter}[hang]{\textchapterfont}{\textbf{第\xCJKnumber{\thechapter}章}}{1em}\textbf{{}}
+\titleformat{\section}[hang]{\textsectionfont}{第\xCJKnumber{\arabic{section}}节}{1em}{}
 \titleformat{\subsection}[hang]{\textsubsectionfont}{\thesubsection}{1em}{}
 \titleformat{\subsubsection}[hang]{\textsubsectionfont}{\thesubsubsection}{1ex}{}% 小四黑体居左
 
@@ -386,7 +392,10 @@
 \AtBeginDocument{\CJKindent{}%
     \makeindex%
     \normalsize%正文字体格式
-    \linespacing{1.682}% 主行距～1.5倍
+    %\linespacing{1.682}% 主行距～1.5倍
+	\linespacing{1.5}
+	%\linespacing{1}% 主行距～1.5倍
+	%\linespread{1.5}
   }
 \AtEndDocument{}
 
@@ -502,7 +511,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \RequirePackage{bm} % 数学符号粗体
 %\RequirePackage[amsmath,thmmarks]{ntheorem}
-\RequirePackage{amsmath,amsthm,mathrsfs} 
+\RequirePackage{amsmath,amsthm} 
 %允许公式换页显示,否则大型推导公式都在一页内，
 %一页显示不下放到第二页，导致很大的空白空间，很不好看
 \allowdisplaybreaks[4]
@@ -542,6 +551,7 @@
 \newtheorem{conjecture}{猜想~}[chapter]
 \newtheorem{property}{性质~}[chapter]
 \newtheorem{assumption}{假设~}[chapter]
+\newtheorem{myrule}{规则~}[chapter]
 
 \renewenvironment{proof}{\vskip 1pt\indent \itshape 证明:~\normalfont}{\hfill$\square$\vskip 0.01\baselineskip} %$\blacksquare$
 %\renewcommand{\proofname}{\hskip 2em 证明:~} % 
